@@ -1,11 +1,11 @@
-name: CoreProtect
+name: CoreProtect-Folia
 main: net.coreprotect.CoreProtect
 version: ${project.version}
 branch: ${project.branch}
 api-version: 1.21.11
 folia-supported: true
 website: https://coreprotect.net
-author: Intelli
+author: Chwitst187
 softdepend: [WorldEdit,AdvancedChests]
 description: >
              Provides block protection for your server.

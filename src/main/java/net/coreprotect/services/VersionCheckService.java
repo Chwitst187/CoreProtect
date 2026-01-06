@@ -37,6 +37,12 @@ public class VersionCheckService {
                 return false;
             }
 
+            // Warn specifically for Minecraft 1.21.11 (do not abort startup)
+            String serverVersion = bukkitVersion[0] + "." + bukkitVersion[1] + (bukkitVersion.length > 2 ? "." + bukkitVersion[2] : "");
+            if ("1.21.11".equals(serverVersion)) {
+                Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + "Diese Version ist unsupported. Es gibt keine Garantie das es ohne Bugs funktioniert!");
+            }
+
             // Check Java version compatibility
             String[] javaVersion = (System.getProperty("java.version").replaceAll("[^0-9.]", "") + ".0").split("\\.");
             if (VersionUtils.newVersion(javaVersion[0] + "." + javaVersion[1], ConfigHandler.JAVA_VERSION)) {
@@ -47,23 +53,17 @@ public class VersionCheckService {
             // Patch version validation
             if (VersionUtils.newVersion(ConfigHandler.PATCH_VERSION, VersionUtils.getPluginVersion()) && !VersionUtils.isBranch("dev")) {
                 Chat.console(Phrase.build(Phrase.VERSION_INCOMPATIBLE, "CoreProtect", "v" + VersionUtils.getPluginVersion()));
-                Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_2));
                 return false;
             }
 
-            // Branch validation
-            if (ConfigHandler.EDITION_BRANCH.length() == 0) {
-                Chat.sendConsoleMessage(Color.RED + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_1));
-                Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_2));
-                Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_3));
-                return false;
-            }
+            // Note: branch unset is non-fatal; do not log phrases INVALID_BRANCH_2/3
 
             // Store Minecraft server version for later use
             ConfigHandler.SERVER_VERSION = Integer.parseInt(bukkitVersion[1]);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            // Use a proper logger instead of printStackTrace
+            Bukkit.getLogger().log(java.util.logging.Level.SEVERE, "Error during version checks", e);
             return false;
         }
 
