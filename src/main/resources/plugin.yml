@@ -4,7 +4,7 @@ version: ${project.version}
 branch: ${project.branch}
 api-version: 1.21.11
 folia-supported: true
-website: http://coreprotect.net
+website: https://coreprotect.net
 author: Intelli
 softdepend: [WorldEdit,AdvancedChests]
 description: >
