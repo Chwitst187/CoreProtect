@@ -37,9 +37,9 @@ public class VersionCheckService {
                 return false;
             }
 
-            // Warn specifically for Minecraft 1.21.11 (do not abort startup)
+            // Warn specifically for Minecraft 1.21.11 (and 1.21.10) (do not abort startup)
             String serverVersion = bukkitVersion[0] + "." + bukkitVersion[1] + (bukkitVersion.length > 2 ? "." + bukkitVersion[2] : "");
-            if ("1.21.11".equals(serverVersion)) {
+            if ("1.21.11".equals(serverVersion) || "1.21.10".equals(serverVersion)) {
                 Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + "Diese Version ist unsupported. Es gibt keine Garantie das es ohne Bugs funktioniert!");
             }
 
@@ -63,7 +63,7 @@ public class VersionCheckService {
         }
         catch (Exception e) {
             // Use a proper logger instead of printStackTrace
-            Bukkit.getLogger().log(java.util.logging.Level.SEVERE, "Error during version checks", e);
+            Bukkit.getServer().getLogger().log(java.util.logging.Level.SEVERE, "Error during version checks", e);
             return false;
         }
 

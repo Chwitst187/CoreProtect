@@ -2,9 +2,8 @@ name: CoreProtect-Folia
 main: net.coreprotect.CoreProtect
 version: ${project.version}
 branch: ${project.branch}
-api-version: 1.21.11
+api-version: 1.21
 folia-supported: true
-website: https://coreprotect.net
 author: Chwitst187
 softdepend: [WorldEdit,AdvancedChests]
 description: >
