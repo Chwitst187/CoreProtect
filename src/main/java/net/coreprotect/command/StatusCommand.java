@@ -1,5 +1,9 @@
 package net.coreprotect.command;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.command.CommandSender;
@@ -64,18 +68,18 @@ public class StatusCommand {
                         Items processed (last 60 minutes)
                      */
 
-                    // Using MySQL/SQLite (Database Size: 587MB)
-
                     String firstVersion = Patch.getFirstVersion();
                     if (firstVersion.length() > 0) {
                         firstVersion = " (" + Phrase.build(Phrase.FIRST_VERSION, firstVersion) + ")";
                     }
-                    if (Config.getGlobal().MYSQL) {
-                        Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_DATABASE, Color.WHITE, "MySQL") + firstVersion);
+
+                    String databaseType = Config.getGlobal().MYSQL ? "MySQL" : "SQLite";
+                    String databaseSize = getDatabaseSize();
+                    if (databaseSize != null) {
+                        databaseType += " (~" + databaseSize + ")";
                     }
-                    else {
-                        Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_DATABASE, Color.WHITE, "SQLite") + firstVersion);
-                    }
+
+                    Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_DATABASE, Color.WHITE, databaseType) + firstVersion);
 
                     if (ConfigHandler.worldeditEnabled) {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_INTEGRATION, Color.WHITE, "WorldEdit", Selector.FIRST));
@@ -180,5 +184,63 @@ public class StatusCommand {
         Runnable runnable = new BasicThread();
         Thread thread = new Thread(runnable);
         thread.start();
+    }
+
+    private static String getDatabaseSize() {
+        try {
+            long bytes = 0;
+
+            if (Config.getGlobal().MYSQL) {
+                try (Connection connection = net.coreprotect.database.Database.getConnection(false, 1000)) {
+                    if (connection == null) {
+                        return null;
+                    }
+
+                    String query = "SELECT SUM(data_length + index_length) FROM information_schema.tables WHERE table_schema = ?";
+                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                        statement.setString(1, ConfigHandler.database);
+                        try (ResultSet resultSet = statement.executeQuery()) {
+                            if (resultSet.next()) {
+                                bytes = resultSet.getLong(1);
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                File sqliteDatabase = new File(ConfigHandler.path + ConfigHandler.sqlite);
+                if (!sqliteDatabase.exists()) {
+                    return null;
+                }
+
+                bytes = sqliteDatabase.length();
+            }
+
+            if (bytes <= 0) {
+                return null;
+            }
+
+            return formatBytes(bytes);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static String formatBytes(long bytes) {
+        String[] units = { "B", "KB", "MB", "GB", "TB" };
+        double size = bytes;
+        int unitIndex = 0;
+
+        while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+        }
+
+        if (size >= 100 || unitIndex == 0) {
+            return String.format("%.0f%s", size, units[unitIndex]);
+        }
+
+        return String.format("%.1f%s", size, units[unitIndex]);
     }
 }
