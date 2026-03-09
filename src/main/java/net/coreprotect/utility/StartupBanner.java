@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class StartupBanner {
@@ -24,14 +23,14 @@ public final class StartupBanner {
                 " \\_____|_| |_|_|  |_|___/",
                 "  _____ _             _ _           ",
                 " / ____| |           | (_)          ",
-                "| |    | |__  _ __ __| |_  ___  ___ ",
-                "| |    | '_ \\| '__/ _` | |/ _ \\/ __|",
-                "| |____| | | | | | (_| | | (_) \\__ \\",
-                " \\_____|_| |_|_|  \\__,_|_|\\___/|___/"
+                "| (___ | |_ _   _  __| |_  ___  ___ ",
+                " \\___ \\| __| | | |/ _` | |/ _ \\/ __|",
+                " ____) | |_| |_| | (_| | | (_) \\__ \\",
+                "|_____/ \\__|\\__,_|\\__,_|_|\\___/|___/"
         };
 
-        PluginDescriptionFile pluginDescription = plugin.getDescription();
-        List<String> authors = pluginDescription.getAuthors();
+        io.papermc.paper.plugin.configuration.PluginMeta pluginMeta = plugin.getPluginMeta();
+        List<String> authors = pluginMeta.getAuthors();
         String authorsStr = authors.isEmpty() ? "Unknown" : String.join(", ", authors);
 
         String divider = "§f━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
@@ -55,7 +54,7 @@ public final class StartupBanner {
         }
 
         console.sendMessage(" ");
-        console.sendMessage(white + "Plugin: " + green + pluginDescription.getName() + " v" + pluginDescription.getVersion());
+        console.sendMessage(white + "Plugin: " + green + pluginMeta.getName() + " v" + pluginMeta.getVersion());
         console.sendMessage(white + "Author: " + blue + authorsStr);
         console.sendMessage(white + "Studio: " + yellow + "CoreProtect");
         console.sendMessage(white + "Server: " + yellow + Bukkit.getVersion());
