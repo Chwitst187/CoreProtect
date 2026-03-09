@@ -41,24 +41,27 @@ public final class StartupBanner {
         String blue = "§9";
         String yellow = "§e";
 
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-        console.sendMessage(" ");
-        console.sendMessage(divider);
+        StringBuilder output = new StringBuilder();
+        output.append(" \n");
+        output.append(divider).append("\n");
 
         for (int i = 0; i < 7; i++) {
-            console.sendMessage(purple + lines[i]);
+            output.append(purple).append(lines[i]).append("\n");
         }
 
         for (int i = 7; i < lines.length; i++) {
-            console.sendMessage(orange + lines[i]);
+            output.append(orange).append(lines[i]).append("\n");
         }
 
-        console.sendMessage(" ");
-        console.sendMessage(white + "Plugin: " + green + pluginMeta.getName() + " v" + pluginMeta.getVersion());
-        console.sendMessage(white + "Author: " + blue + authorsStr);
-        console.sendMessage(white + "Studio: " + yellow + "CoreProtect");
-        console.sendMessage(white + "Server: " + yellow + Bukkit.getVersion());
-        console.sendMessage(" ");
-        console.sendMessage(divider);
+        output.append(" \n");
+        output.append(white).append("Plugin: ").append(green).append(pluginMeta.getName()).append(" v").append(pluginMeta.getVersion()).append("\n");
+        output.append(white).append("Author: ").append(blue).append(authorsStr).append("\n");
+        output.append(white).append("Studio: ").append(yellow).append("CoreProtect").append("\n");
+        output.append(white).append("Server: ").append(yellow).append(Bukkit.getVersion()).append("\n");
+        output.append(" \n");
+        output.append(divider);
+
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        console.sendMessage(output.toString());
     }
 }
