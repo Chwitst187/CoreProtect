@@ -116,6 +116,14 @@ public class PluginInitializationService {
         PluginDescriptionFile pluginDescription = plugin.getDescription();
         ChatUtils.sendConsoleComponentStartup(Bukkit.getServer().getConsoleSender(), Phrase.build(Phrase.ENABLE_SUCCESS, ConfigHandler.EDITION_NAME));
 
+        if (ConfigHandler.isFolia) {
+            Bukkit.getLogger().severe("[CoreProtect] Folia support is extremely experimental. Stability is not guaranteed.");
+        }
+
+        if (Bukkit.getServer().getBukkitVersion().startsWith(ConfigHandler.LATEST_VERSION + "-")) {
+            Bukkit.getLogger().severe("[CoreProtect] " + ConfigHandler.LATEST_VERSION + " support is extremely experimental. Stability is not guaranteed.");
+        }
+
         if (Config.getGlobal().MYSQL) {
             Chat.console(Phrase.build(Phrase.USING_MYSQL));
         }
