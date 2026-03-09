@@ -21,6 +21,7 @@ import net.coreprotect.thread.NetworkHandler;
 import net.coreprotect.thread.Scheduler;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ChatUtils;
+import net.coreprotect.utility.StartupBanner;
 
 /**
  * Service responsible for plugin initialization tasks
@@ -115,6 +116,7 @@ public class PluginInitializationService {
     private static void displayStartupMessages(JavaPlugin plugin) {
         PluginDescriptionFile pluginDescription = plugin.getDescription();
         ChatUtils.sendConsoleComponentStartup(Bukkit.getServer().getConsoleSender(), Phrase.build(Phrase.ENABLE_SUCCESS, ConfigHandler.EDITION_NAME));
+        StartupBanner.show(plugin);
 
         if (ConfigHandler.isFolia) {
             Bukkit.getLogger().severe("[CoreProtect] Folia support is extremely experimental. Stability is not guaranteed.");
