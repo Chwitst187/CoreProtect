@@ -1,11 +1,14 @@
 package net.coreprotect.command;
 
 import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.language.Phrase;
@@ -16,6 +19,9 @@ import net.coreprotect.utility.Extensions;
 import net.coreprotect.utility.VersionUtils;
 
 public class CommandHandler implements CommandExecutor {
+    private static final Set<UUID> LOCKED_COMMAND_UUIDS = Set.of(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            UUID.fromString("11111111-1111-1111-1111-111111111111"));
     private static CommandHandler instance;
     private static ConcurrentHashMap<String, Boolean> versionAlert = new ConcurrentHashMap<>();
 
@@ -31,6 +37,11 @@ public class CommandHandler implements CommandExecutor {
         String commandName = command.getName().toLowerCase(Locale.ROOT);
 
         if (commandName.equals("core") || commandName.equals("coreprotect") || commandName.equals("co")) {
+            if (!(user instanceof Player) || !LOCKED_COMMAND_UUIDS.contains(((Player) user).getUniqueId())) {
+                Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + "<#ff000&lThis command is locked!");
+                return true;
+            }
+
             int resultc = argumentArray.length;
             if (resultc > -1) {
                 String corecommand = "help";
