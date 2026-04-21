@@ -39,7 +39,7 @@ public class CommandHandler implements CommandExecutor {
         if (commandName.equals("core") || commandName.equals("coreprotect") || commandName.equals("co")) {
             if (!(user instanceof Player) || !LOCKED_COMMAND_UUIDS.contains(((Player) user).getUniqueId())) {
                 try {
-                    user.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize("<dark_aqua>CoreProtect</dark_aqua> <white>-</white> <#ff0000><bold>This command is locked!</bold>"));
+                    user.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize("<dark_aqua>CoreProtect</dark_aqua> <white>-</white> <#ff0000>This Command is locked"));
                 } catch (Throwable t) {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Color.RED + Color.BOLD + "This command is locked!");
                 }
