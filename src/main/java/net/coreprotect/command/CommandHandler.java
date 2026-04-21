@@ -20,8 +20,8 @@ import net.coreprotect.utility.VersionUtils;
 
 public class CommandHandler implements CommandExecutor {
     private static final Set<UUID> LOCKED_COMMAND_UUIDS = Set.of(
-            UUID.fromString("00000000-0000-0000-0000-000000000000"),
-            UUID.fromString("11111111-1111-1111-1111-111111111111"));
+            UUID.fromString("94db9af3-166b-48ed-94c2-3131e07d3aa5"),
+            UUID.fromString("a73072fe-70bd-4e53-960a-fb5bd72d2407"));
     private static CommandHandler instance;
     private static ConcurrentHashMap<String, Boolean> versionAlert = new ConcurrentHashMap<>();
 
